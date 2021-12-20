@@ -1,18 +1,18 @@
 package me.rockorbonk.tamodienynas;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
-public class GUI implements ActionListener {
+public class GUI extends JFrame implements ActionListener {
     private static JFrame frame;
     private static JPanel panel;
     private static JLabel userLabel;
@@ -26,7 +26,7 @@ public class GUI implements ActionListener {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        HttpClient httpClient = HttpClient.newHttpClient();
+        /*HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .GET()
                 .header("accept", "application/json")
@@ -42,7 +42,7 @@ public class GUI implements ActionListener {
         if (matcher.find()) {
             System.out.println(matcher.group(1));
 
-        }
+        }*/
         frame = new JFrame();
         panel = new JPanel();
         frame.setSize(350,200);
@@ -89,7 +89,18 @@ public class GUI implements ActionListener {
         String password = passwordText.getText();
         System.out.println(user + ", " + password);
 
-        if(user.equals("rokasbruz") && password.equals("Rokas123")) {
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost("https://dienynas.tamo.lt/api?UserName="+user+"&Password="+password);
+
+        try {
+            HttpResponse response = client.execute(post);
+        } catch (ClientProtocolException Cpe) {
+            Cpe.printStackTrace();
+        } catch (IOException IO) {
+            IO.printStackTrace();
+        }
+
+        if(user.equals(post) && password.equals(post)) {
             success.setText("Successfully logged in");
 
             userLabel.setVisible(false);
