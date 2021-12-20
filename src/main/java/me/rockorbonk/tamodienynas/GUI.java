@@ -3,6 +3,14 @@ package me.rockorbonk.tamodienynas;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class GUI implements ActionListener {
     private static JFrame frame;
@@ -14,8 +22,27 @@ public class GUI implements ActionListener {
     private static JTextField userText;
     private static JPasswordField passwordText;
     private static JButton register; //TODO
+    private static final String tamoDienynas = "https://dienynas.tamo.lt/api?UserName=rokasbruz&Password=Rokas123";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(tamoDienynas))
+                .build();
+        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+        String html = "<html><head><body><div style=\"font-size:24px;font-weight:bold;line-height:24px;\"> 10 </div></body></head></html>";
+
+        Pattern pattern = Pattern.compile(".*<div style=\"font-size:24px;font-weight:bold;line-height:24px;\">(.*?)</div>.*");
+        Matcher matcher = pattern.matcher(html);
+
+        if (matcher.find()) {
+            System.out.println(matcher.group(1));
+
+        }
         frame = new JFrame();
         panel = new JPanel();
         frame.setSize(350,200);
