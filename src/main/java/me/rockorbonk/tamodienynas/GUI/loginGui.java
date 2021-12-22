@@ -1,15 +1,25 @@
 package me.rockorbonk.tamodienynas.GUI;
 
+import jdk.swing.interop.SwingInterOpUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Stream;
 
 
 public class loginGui extends JFrame  implements ActionListener {
@@ -73,7 +83,19 @@ public class loginGui extends JFrame  implements ActionListener {
         HttpPost post = new HttpPost("https://dienynas.tamo.lt/Prisijungimas/Login/Username="+uname+"&Password=" + pwd);
 
         try {
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+            nameValuePairs.add(new BasicNameValuePair("uname", uname));
+            nameValuePairs.add(new BasicNameValuePair("pwd", pwd));
+            post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
             HttpResponse response = client.execute(post);
+
+            HttpEntity entity = response.getEntity();
+            InputStream inputStream = entity.getContent();
+            Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
+            String rsp = scanner.hasNext() ? scanner.next() : "";
+            System.out.println("Response from server : " + rsp);
+
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
