@@ -1,6 +1,5 @@
 package me.rockorbonk.tamodienynas.GUI;
 
-import jdk.swing.interop.SwingInterOpUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -15,11 +14,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 
 public class loginGui extends JFrame  implements ActionListener {
@@ -92,9 +89,12 @@ public class loginGui extends JFrame  implements ActionListener {
 
             HttpEntity entity = response.getEntity();
             InputStream inputStream = entity.getContent();
-            Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
-            String rsp = scanner.hasNext() ? scanner.next() : "";
-            System.out.println("Response from server : " + rsp);
+            //Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
+            try(Scanner scanner = new Scanner(inputStream)) {
+                String rsp = scanner.useDelimiter("").next();
+                System.out.println("Response from server : " + rsp);
+            }
+
 
         } catch (ClientProtocolException e) {
             e.printStackTrace();
