@@ -4,6 +4,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -76,22 +77,23 @@ public class loginGui extends JFrame  implements ActionListener {
         String uname = userText.getText();
         String pwd = passwordText.getText();
 
-        DefaultHttpClient client = new DefaultHttpClient();
+        HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost("https://dienynas.tamo.lt/Prisijungimas/Login/Username="+uname+"&Password=" + pwd);
 
-        try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair("uname", uname));
-            nameValuePairs.add(new BasicNameValuePair("pwd", pwd));
-            post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+        nameValuePairs.add(new BasicNameValuePair("UserName", uname));
+        nameValuePairs.add(new BasicNameValuePair("Password", pwd));
 
+        try {
             HttpResponse response = client.execute(post);
+
+            loginGui.d
 
             HttpEntity entity = response.getEntity();
             InputStream inputStream = entity.getContent();
             //Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
             try(Scanner scanner = new Scanner(inputStream)) {
-                String rsp = scanner.useDelimiter("").next();
+                String rsp = scanner.useDelimiter("\\a").next();
                 System.out.println("Response from server : " + rsp);
             }
 
