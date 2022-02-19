@@ -1,28 +1,11 @@
 package me.rockorbonk.tamodienynas.GUI;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 
 public class loginGui extends JFrame  implements ActionListener {
 
-    private static final long serialVersionUID = 1L;
     private static JFrame frame;
     private static JPanel panel;
     private static JLabel userLabel;
@@ -64,10 +47,10 @@ public class loginGui extends JFrame  implements ActionListener {
         panel.add(login);
 
         success = new JLabel("");
-        success.setBounds(10, 540, 300, 25);
+        success.setBounds(10, 110, 300, 25);
         panel.add(success);
 
-        ImageIcon icon = new ImageIcon("C:\\Users\\uname\\Desktop\\tamo.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\uname\\Desktop\\TamoDienynas\\pngs\\tamo.png");
         frame.setIconImage(icon.getImage());
         frame.setVisible(true);
     }
@@ -77,47 +60,33 @@ public class loginGui extends JFrame  implements ActionListener {
         String uname = userText.getText();
         String pwd = passwordText.getText();
 
-        HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost("https://dienynas.tamo.lt/Prisijungimas/Login/Username="+uname+"&Password=" + pwd);
+        if(uname.equals("rokasbruz") && pwd.equals("Rokas123")) {
+            success.setText("Sekmingai prisijungėte!");
 
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-        nameValuePairs.add(new BasicNameValuePair("UserName", uname));
-        nameValuePairs.add(new BasicNameValuePair("Password", pwd));
+            ActionListener l = new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    userLabel.setVisible(false);
+                    passwordLabel.setVisible(false);
+                    userText.setVisible(false);
+                    passwordText.setVisible(false);
+                    login.setVisible(false);
 
-        try {
-            HttpResponse response = client.execute(post);
+                    success.setVisible(false);
 
-            loginGui.d
+                }
+            };
+            Timer timer = new Timer(2000, l);
+            timer.setRepeats(false);
+            timer.start();
 
-            HttpEntity entity = response.getEntity();
-            InputStream inputStream = entity.getContent();
-            //Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
-            try(Scanner scanner = new Scanner(inputStream)) {
-                String rsp = scanner.useDelimiter("\\a").next();
-                System.out.println("Response from server : " + rsp);
-            }
-
-
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        if (ae.getSource() == login) {
-            if (uname.equals(post) && pwd.equals(post)) {
-                frame.setSize(frame.getWidth() + 500, frame.getHeight() + 400);
-
-            }
+        else{
+            success.setText("Slapyvardis arba slaptažodis nesutampa!");
         }
+
     }
     public static void main(String[] args) {
-        try {
-            loginGui loginFrame = new loginGui();
+    new loginGui();
 
-        } catch (Exception e) {
-            {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
-        }
     }
 }
