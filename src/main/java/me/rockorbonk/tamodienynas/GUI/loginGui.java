@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 
 public class loginGui extends JFrame  implements ActionListener {
 
-    private static JFrame frame;
-    private static JPanel panel;
     private static JLabel userLabel;
     private static JLabel passwordLabel;
     private static JLabel success;
@@ -16,8 +14,8 @@ public class loginGui extends JFrame  implements ActionListener {
     private static JPasswordField passwordText;
 
     loginGui() {
-        frame = new JFrame();
-        panel = new JPanel();
+        JFrame frame = new JFrame();
+        JPanel panel = new JPanel();
         frame.setSize(350, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -63,17 +61,15 @@ public class loginGui extends JFrame  implements ActionListener {
         if(uname.equals("rokasbruz") && pwd.equals("Rokas123")) {
             success.setText("Sekmingai prisijungėte!");
 
-            ActionListener l = new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    userLabel.setVisible(false);
-                    passwordLabel.setVisible(false);
-                    userText.setVisible(false);
-                    passwordText.setVisible(false);
-                    login.setVisible(false);
+            ActionListener l = evt -> {
+                userLabel.setVisible(false);
+                passwordLabel.setVisible(false);
+                userText.setVisible(false);
+                passwordText.setVisible(false);
+                login.setVisible(false);
 
-                    success.setVisible(false);
+                success.setVisible(false);
 
-                }
             };
             Timer timer = new Timer(2000, l);
             timer.setRepeats(false);
