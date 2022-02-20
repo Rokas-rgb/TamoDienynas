@@ -4,8 +4,12 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static me.rockorbonk.tamodienynas.GUI.mainGui.mainScreen;
+
 public class loginGui extends JFrame  implements ActionListener {
 
+
+    private static JFrame frame;
     private static JLabel userLabel;
     private static JLabel passwordLabel;
     private static JLabel success;
@@ -14,7 +18,7 @@ public class loginGui extends JFrame  implements ActionListener {
     private static JPasswordField passwordText;
 
     loginGui() {
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         JPanel panel = new JPanel();
         frame.setSize(350, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -69,12 +73,13 @@ public class loginGui extends JFrame  implements ActionListener {
                 login.setVisible(false);
 
                 success.setVisible(false);
+                frame.setVisible(false);
+                mainScreen.setVisible(true);
 
             };
             Timer timer = new Timer(2000, l);
             timer.setRepeats(false);
             timer.start();
-
         }
         else{
             success.setText("Slapyvardis arba slaptažodis nesutampa!");
